@@ -16,7 +16,12 @@
 #include "conversion.h"
 #include "LCD.h"
 #define XTAL_FREQ 4000000 //4Mhz
-
+        
+#define SUBIR PORTAbits.RA0
+#define BAJAR PORTAbits.RA1
+#define ENTER PORTAbits.RA2
+#define PUERTO PORTA
+#define DIGITAL TRISA
 unsigned int B=0,q=0,w=0,e=0,r=0,t=0,C=0,D=0,p=0,frecuencia,M=0;
 
 void main(void)
@@ -24,25 +29,22 @@ void main(void)
     unsigned char A=47,cantidad=0,cant=0;
      char cadena[20],cad[20];
     unsigned int Z=0,X=0,V=0;
+    PUERTO=0;
     OSCCON=0b01010111;
     ANSELD=0;
     Lcd_Init(); 
 
-    TRISBbits.RB0=1;
-    TRISBbits.RB1=1;
-    TRISBbits.RB2=1;
-    TRISBbits.RB3=1;
-    TRISBbits.RB4=1;
-    ANSELB=0;
+    DIGITAL=0;
+    ANSELA=0;
   do{
       
-  if(PORTBbits.RB0==1)
+  if(SUBIR==1)
       {
           B++;
           __delay_ms(10);
       }
       
-  if(PORTBbits.RB1==1)
+  if(BAJAR==1)
       {
           B--;
           __delay_ms(10);
@@ -58,227 +60,17 @@ if(B==0){
    
     
 }  
-    
+  
   if(B==1){
     Lcd_Init();
     Lcd_Cmd(LCD_CLEAR);
     Lcd_Cmd(LCD_CURSOR_OFF);
-    Lcd_Out2(1,1,"=> Senoidal");
-    Lcd_Out2(2,1,"   Triangular");
-    tm_1s();
- 
-    if(PORTBbits.RB2==1){
-        w=0;
-   do{
-   
-    if(B==0){
-    Lcd_Init();
-    Lcd_Cmd(LCD_CLEAR);
-    Lcd_Cmd(LCD_CURSOR_OFF);
-    Lcd_Out2(1,1,"=> Sin 1");
-    Lcd_Out2(2,1,"   Sin 2");
-    tm_1s(); 
-    if(PORTBbits.RB2==1){
-        q=0;
-       Lcd_Init();
-       Lcd_Cmd(LCD_CLEAR);
-       Lcd_Cmd(LCD_CURSOR_OFF);
-       Lcd_Out2(1,1," Sin 1");
-        do{
-            SENO_1();
-          if(PORTBbits.RB3==1){
-              q=1;
-          }  
-        }while(q==0);
-    }
-    }        
-    
-    if(B==1){
-    Lcd_Init();
-    Lcd_Cmd(LCD_CLEAR);
-    Lcd_Cmd(LCD_CURSOR_OFF);
-    Lcd_Out2(1,1,"   Sin 1");
-    Lcd_Out2(2,1,"=> Sin 2");
-    tm_1s(); 
-    if(PORTBbits.RB2==1){
-        q=0;
-       Lcd_Init();
-       Lcd_Cmd(LCD_CLEAR);
-       Lcd_Cmd(LCD_CURSOR_OFF);
-       Lcd_Out2(1,1," Sin 2");
-        do{
-            SENO_2();
-          if(PORTBbits.RB3==1){
-              q=1;
-          }  
-        }while(q==0);
-    }
-    }
-    
-    if(B==2){
-    Lcd_Init();
-    Lcd_Cmd(LCD_CLEAR);
-    Lcd_Cmd(LCD_CURSOR_OFF);
-    Lcd_Out2(1,1,"=> Sin 3");
-    tm_1s();
-    if(PORTBbits.RB2==1){
-        q=0;
-       Lcd_Init();
-       Lcd_Cmd(LCD_CLEAR);
-       Lcd_Cmd(LCD_CURSOR_OFF);
-       Lcd_Out2(1,1," Sin 3");
-        do{
-            SENO_3();
-          if(PORTBbits.RB3==1){
-              q=1;
-          }  
-        }while(q==0);
-    }
-    }
-    
-    if(PORTBbits.RB0==1)
-      {
-          B++;
-          __delay_ms(10);
-      }
-      
-    if(PORTBbits.RB1==1)
-      {
-          B--;
-          __delay_ms(10);
-      }
-      if(B>2){
-      B=0;
-       }
-   
-       if(B<0){
-      B=0;
-      } 
-    if(PORTBbits.RB0==1 && PORTBbits.RB3==1 ){
-        w=1;
-    }        
-        }while(w==0);
-        
-    }
-   
-    
-} 
-
-  
-  if(B==2){
-     Lcd_Init();
-    Lcd_Cmd(LCD_CLEAR);
-    Lcd_Cmd(LCD_CURSOR_OFF);
-    Lcd_Out2(1,1,"   Senoidal");
-    Lcd_Out2(2,1,"=> Triangular");
-    tm_1s(); 
-    
-     
-    if(PORTBbits.RB2==1){
-        w=0;
-   do{
-   
-    if(B==0){
-    Lcd_Init();
-    Lcd_Cmd(LCD_CLEAR);
-    Lcd_Cmd(LCD_CURSOR_OFF);
-    Lcd_Out2(1,1,"=> Trin 1");
-    Lcd_Out2(2,1,"   Trin 2");
-    tm_1s(); 
-    if(PORTBbits.RB2==1){
-        q=0;
-       Lcd_Init();
-       Lcd_Cmd(LCD_CLEAR);
-       Lcd_Cmd(LCD_CURSOR_OFF);
-       Lcd_Out2(1,1," Trin 1");
-        do{
-            TRI_1();
-          if(PORTBbits.RB3==1){
-              q=1;
-          }  
-        }while(q==0);
-    }
-    }        
-    
-    if(B==1){
-    Lcd_Init();
-    Lcd_Cmd(LCD_CLEAR);
-    Lcd_Cmd(LCD_CURSOR_OFF);
-    Lcd_Out2(1,1,"   Trin 1");
-    Lcd_Out2(2,1,"=> Trin 2");
-    tm_1s(); 
-    if(PORTBbits.RB2==1){
-        q=0;
-       Lcd_Init();
-       Lcd_Cmd(LCD_CLEAR);
-       Lcd_Cmd(LCD_CURSOR_OFF);
-       Lcd_Out2(1,1," Trin 2");
-        do{
-            TRI_2();
-          if(PORTBbits.RB3==1){
-              q=1;
-          }  
-        }while(q==0);
-    }
-    }
-    
-    if(B==2){
-    Lcd_Init();
-    Lcd_Cmd(LCD_CLEAR);
-    Lcd_Cmd(LCD_CURSOR_OFF);
-    Lcd_Out2(1,1,"=> Trin 3");
-    tm_1s();
-    if(PORTBbits.RB2==1){
-        q=0;
-       Lcd_Init();
-       Lcd_Cmd(LCD_CLEAR);
-       Lcd_Cmd(LCD_CURSOR_OFF);
-       Lcd_Out2(1,1," Trin 3");
-        do{
-            TRI_3();
-          if(PORTBbits.RB3==1){
-              q=1;
-          }  
-        }while(q==0);
-    }
-    }
-    
-    if(PORTBbits.RB0==1)
-      {
-          B++;
-          __delay_ms(10);
-      }
-      
-    if(PORTBbits.RB1==1)
-      {
-          B--;
-          __delay_ms(10);
-      }
-      if(B>2){
-      B=0;
-       }
-   
-       if(B<0){
-      B=0;
-      } 
-    if(PORTBbits.RB0==1 && PORTBbits.RB3==1 ){
-        w=1;
-    }        
-        }while(w==0);
-        
-    }
-   
-} 
-   
-  if(B==3){
-    Lcd_Init();
-    Lcd_Cmd(LCD_CLEAR);
-    Lcd_Cmd(LCD_CURSOR_OFF);
     Lcd_Out2(1,1,"=> PWM");
+    Lcd_Out2(2,1,"   Senoidal");
     tm_1s();
    
 
-if(PORTBbits.RB4==1){
+if(ENTER==1){
     do{
     w=0;
     if(B==0){  
@@ -298,7 +90,7 @@ if(PORTBbits.RB4==1){
     tm_1s();
 
     
-    if(PORTBbits.RB4==1){
+    if(ENTER==1){
       do{
           e=0;
     if(B==0){   
@@ -320,7 +112,7 @@ if(PORTBbits.RB4==1){
           tm_1s();
 
           
-    if(PORTBbits.RB4==1){
+    if(ENTER==1){
         r=0;
         do{  
           Lcd_Init();
@@ -329,7 +121,7 @@ if(PORTBbits.RB4==1){
           Lcd_Out2(1,1,"  000 Hz");
           tm_1s();
 
-            if(PORTBbits.RB3==1){
+            if(SUBIR==1){
                 A++;
                 lcd_goto(2,1);
                 Lcd_Chr_CP(A);
@@ -358,7 +150,7 @@ if(PORTBbits.RB4==1){
        if(A>57){
            A=47;
        }    
-       if(PORTBbits.RB0==1 && PORTBbits.RB1==1){ // para salir de la frecuencia
+       if(BAJAR==1){ // para salir de la frecuencia
            r=1;
        }     
             
@@ -375,7 +167,7 @@ if(PORTBbits.RB4==1){
           Lcd_Out2(2,1,"=> Ciclo");
           tm_1s();
 
-if(PORTBbits.RB4==1){
+if(ENTER==1){
     
 do{
    t=0;    
@@ -529,13 +321,13 @@ if(B==10){
    Z=100;
 
 }   
-if(PORTBbits.RB0==1)
+if(SUBIR==1)
       {
           B++;
           __delay_ms(10);
       }
       
-  if(PORTBbits.RB1==1)
+  if(BAJAR==1)
       {
           B--;
           __delay_ms(10);
@@ -549,7 +341,7 @@ if(PORTBbits.RB0==1)
       B=1;
   } 
        
-       if(PORTBbits.RB1==1 && PORTBbits.RB2==1){
+       if(ENTER==1){
            t=1;
        }   
        
@@ -558,13 +350,13 @@ if(PORTBbits.RB0==1)
    }        
           
   }           
-   if(PORTBbits.RB0==1)
+   if(SUBIR==1)
       {
           B++;
           __delay_ms(10);
       }
       
-  if(PORTBbits.RB1==1)
+  if(BAJAR==1)
       {
           B--;
           __delay_ms(10);
@@ -576,9 +368,10 @@ if(PORTBbits.RB0==1)
    
   if(B<0){
       B=1;
+      //e=1;
   } 
           
- if(PORTBbits.RB0==1 && PORTBbits.RB3==1){
+ if(SUBIR==1 && BAJAR==1){
        e=1; 
     }      
       }
@@ -594,7 +387,7 @@ if(PORTBbits.RB0==1)
     tm_1s();
 
     }
-    if(PORTBbits.RB2==1){
+    if(ENTER==1){
         p=0;
         Lcd_Init();
         Lcd_Cmd(LCD_CLEAR);
@@ -619,22 +412,22 @@ if(PORTBbits.RB0==1)
         do{
 
 
-        if(PORTBbits.RB0==1 && PORTBbits.RB2==1){
+        if(SUBIR==1){
             p=1;
         }
         }while(p==0);
     }
-    if(PORTBbits.RB0==1 && PORTBbits.RB2==1){
+    if(SUBIR==1 && BAJAR==1){
        w=1; 
     }
     
-    if(PORTBbits.RB0==1)
+    if(SUBIR==1)
       {
           B++;
           __delay_ms(10);
       }
       
-    if(PORTBbits.RB1==1)
+    if(BAJAR==1)
       {
           B--;
           __delay_ms(10);
@@ -654,7 +447,216 @@ if(PORTBbits.RB0==1)
     
     
 } 
+  
+  if(B==2){
+    Lcd_Init();
+    Lcd_Cmd(LCD_CLEAR);
+    Lcd_Cmd(LCD_CURSOR_OFF);
+    Lcd_Out2(1,1,"   PWM");
+    Lcd_Out2(2,1,"=> Senoidal");
+    tm_1s();
+ 
+    if(ENTER==1){
+        w=0;
+   do{
    
+    if(B==0){
+    Lcd_Init();
+    Lcd_Cmd(LCD_CLEAR);
+    Lcd_Cmd(LCD_CURSOR_OFF);
+    Lcd_Out2(1,1,"=> Sin 1");
+    Lcd_Out2(2,1,"   Sin 2");
+    tm_1s(); 
+    if(ENTER==1){
+        q=0;
+       Lcd_Init();
+       Lcd_Cmd(LCD_CLEAR);
+       Lcd_Cmd(LCD_CURSOR_OFF);
+       Lcd_Out2(1,1," Sin 1");
+        do{
+            SENO_1();
+          if(BAJAR==1){
+              q=1;
+          }  
+        }while(q==0);
+    }
+    }        
+    
+    if(B==1){
+    Lcd_Init();
+    Lcd_Cmd(LCD_CLEAR);
+    Lcd_Cmd(LCD_CURSOR_OFF);
+    Lcd_Out2(1,1,"   Sin 1");
+    Lcd_Out2(2,1,"=> Sin 2");
+    tm_1s(); 
+    if(ENTER==1){
+        q=0;
+       Lcd_Init();
+       Lcd_Cmd(LCD_CLEAR);
+       Lcd_Cmd(LCD_CURSOR_OFF);
+       Lcd_Out2(1,1," Sin 2");
+        do{
+            SENO_2();
+          if(BAJAR==1){
+              q=1;
+          }  
+        }while(q==0);
+    }
+    }
+    
+    if(B==2){
+    Lcd_Init();
+    Lcd_Cmd(LCD_CLEAR);
+    Lcd_Cmd(LCD_CURSOR_OFF);
+    Lcd_Out2(1,1,"=> Sin 3");
+    tm_1s();
+    if(ENTER==1){
+        q=0;
+       Lcd_Init();
+       Lcd_Cmd(LCD_CLEAR);
+       Lcd_Cmd(LCD_CURSOR_OFF);
+       Lcd_Out2(1,1," Sin 3");
+        do{
+            SENO_3();
+          if(BAJAR==1){
+              q=1;
+          }  
+        }while(q==0);
+    }
+    }
+    
+    if(SUBIR==1)
+      {
+          B++;
+          __delay_ms(10);
+      }
+      
+    if(BAJAR==1)
+      {
+          B--;
+          __delay_ms(10);
+      }
+      if(B>2){
+      B=0;
+       }
+   
+       if(B<0){
+      B=0;
+      } 
+    if(BAJAR==1 && SUBIR==1 ){
+        w=1;
+    }        
+        }while(w==0);
+        
+    }
+   
+    
+} 
+  
+  if(B==3){
+     Lcd_Init();
+    Lcd_Cmd(LCD_CLEAR);
+    Lcd_Cmd(LCD_CURSOR_OFF);
+    Lcd_Out2(1,1,"=> Triangular");  
+    tm_1s(); 
+    
+     
+    if(ENTER==1){
+        w=0;
+   do{
+   
+    if(B==0){
+    Lcd_Init();
+    Lcd_Cmd(LCD_CLEAR);
+    Lcd_Cmd(LCD_CURSOR_OFF);
+    Lcd_Out2(1,1,"=> Trin 1");
+    Lcd_Out2(2,1,"   Trin 2");
+    tm_1s(); 
+    if(ENTER==1){
+        q=0;
+       Lcd_Init();
+       Lcd_Cmd(LCD_CLEAR);
+       Lcd_Cmd(LCD_CURSOR_OFF);
+       Lcd_Out2(1,1," Trin 1");
+        do{
+            TRI_1();
+          if(SUBIR==1){
+              q=1;
+          }  
+        }while(q==0);
+    }
+    }        
+    
+    if(B==1){
+    Lcd_Init();
+    Lcd_Cmd(LCD_CLEAR);
+    Lcd_Cmd(LCD_CURSOR_OFF);
+    Lcd_Out2(1,1,"   Trin 1");
+    Lcd_Out2(2,1,"=> Trin 2");
+    tm_1s(); 
+    if(ENTER==1){
+        q=0;
+       Lcd_Init();
+       Lcd_Cmd(LCD_CLEAR);
+       Lcd_Cmd(LCD_CURSOR_OFF);
+       Lcd_Out2(1,1," Trin 2");
+        do{
+            TRI_2();
+          if(SUBIR==1){
+              q=1;
+          }  
+        }while(q==0);
+    }
+    }
+    
+    if(B==2){
+    Lcd_Init();
+    Lcd_Cmd(LCD_CLEAR);
+    Lcd_Cmd(LCD_CURSOR_OFF);
+    Lcd_Out2(1,1,"=> Trin 3");
+    tm_1s();
+    if(ENTER==1){
+        q=0;
+       Lcd_Init();
+       Lcd_Cmd(LCD_CLEAR);
+       Lcd_Cmd(LCD_CURSOR_OFF);
+       Lcd_Out2(1,1," Trin 3");
+        do{
+            TRI_3();
+          if(SUBIR==1){
+              q=1;
+          }  
+        }while(q==0);
+    }
+    }
+    
+    if(SUBIR==1)
+      {
+          B++;
+          __delay_ms(10);
+      }
+      
+    if(BAJAR==1)
+      {
+          B--;
+          __delay_ms(10);
+      }
+      if(B>2){
+      B=0;
+       }
+   
+       if(B<0){
+      B=0;
+      } 
+    if(BAJAR==1 && SUBIR==1 ){
+        w=1;
+    }        
+        }while(w==0);
+        
+    }
+   
+} 
+  
 
   if(B>3){
       B=1;
